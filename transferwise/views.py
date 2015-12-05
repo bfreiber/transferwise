@@ -6,6 +6,9 @@ import json
 import urllib
 import requests
 
+#http://shapebootstrap.net/item/1524990-cyprass-html5-responsive-business-template/live-demo
+#http://shapebootstrap.net/item/1524954-kadmin-free-responsive-admin-dashboard-template/live-demo
+
 ########## GLOBAL VARIABLES ##########
 twitchClientId = 'jxjy5g4eoo0idnkp4rqi567xjbkfan9'
 twitchClientSecret = 'lgqfpl9if80lyu3hsdvo5zy05b6h5ur'
@@ -14,7 +17,7 @@ twitchState = 'randomVariables'
 
 ########## PAGE MAPS ##########
 def landing(request):
-	return render(request, 'landing.html')
+	return render(request, 'index.html')
 
 
 #### BEGINNING OF TWITCH LOGIN ####
@@ -51,3 +54,6 @@ def twitchLoginLanding(request):
 
 
 ########## OTHER/ALGORITHMS/RECOMMENDATIONS ##########
+def turnSubscriptionsViewsAndFollowersToRevenue(subscriptions,views,followers):
+	# Some estimations here # TBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBD
+	return revenue
