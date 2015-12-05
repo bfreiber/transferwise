@@ -19,5 +19,8 @@ from django.contrib import admin
 
 urlpatterns = [
 		url(r'^$', 'transferwise.views.landing', name='landing'),
+		url(r'^loginViaTwitch/$', 'transferwise.views.loginViaTwitch', name='loginViaTwitch'),
+		url(r'^twitchLoginLanding/$', 'transferwise.views.twitchLoginLanding', name='twitchLoginLanding'),
+
     url(r'^admin/', admin.site.urls),
 ]
