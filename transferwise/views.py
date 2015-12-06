@@ -39,21 +39,62 @@ def twitchLoginLanding(request):
 
 			# Save token # TBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBD
 
-			# Make call with access_token #
+			# Make call with access_token
 			headers = {"Authorization":'OAuth '+accessToken}
 			url = 'https://api.twitch.tv/kraken/user'
 			r = requests.get(url, headers=headers)
-			return HttpResponse(r.text)
+			json_object = r.json()
+
+			# For demo, dummy data #
+			if json_object['display_name'] == 'bfreiber':
+				subscriptions = 780
+				totalViews = 8764777
+				watchingNow = 2321
+				followers = 101844
+				estimatedRevenue = turnSubscriptionsViewsAndFollowersToRevenue(subscriptions, totalViews, watchingNow, followers)
+				userName = json_object['display_name']
+
+			else:
+				# Get user channels #
+				#headers = {"Authorization":'OAuth '+accessToken}
+				#url = 'https://api.twitch.tv/kraken/channel'
+				#r = requests.get(url, headers=headers)
+				subscriptions = 780
+				totalViews = 8764777
+				watchingNow = 2321
+				followers = 101844
+				estimatedRevenue = float(turnSubscriptionsViewsAndFollowersToRevenue(subscriptions, totalViews, watchingNow, followers))
+				userName = 'bfreiber'
+			#return HttpResponse(estimatedRevenue)
+			# Feed into Ash's API #
+			url = 'http://cronopio.herokuapp.com/evaluation/annual_revenue/%s' % (str(estimatedRevenue))
+			r = requests.get(url)
+			json_object = r.json()
+			maxLoan = json_object['max']
+			minLoan = json_object['min']
+			return render(request, 'dashboard.html', {'subscriptions':subscriptions, 'totalViews':totalViews, 'watchingNow':watchingNow, 'followers':followers, 'estimatedRevenue':estimatedRevenue, 'userName':userName})
 		else:
 			return HttpResponse('Error - non 200 status code')
 	else:
 		return HttpResponse('Error - no code provided')
 
+# Scraping #
+#revenueViaCurrentViewers = 
+
 #### END OF TWITCH LOGIN ####
+
+def dashboard(request):
+	return render(request, 'dashboard.html')
 
 
 
 ########## OTHER/ALGORITHMS/RECOMMENDATIONS ##########
-def turnSubscriptionsViewsAndFollowersToRevenue(subscriptions,views,followers):
+def turnSubscriptionsViewsAndFollowersToRevenue(subscriptions, totalViews, watchingNow, followers):
 	# Some estimations here # TBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBDTBD
-	return revenue
+	#Twitch revenue per hour per huse
+	revenuePerHourPerUser = 1000.0/(200.0*2500.0)
+	estimatedRevenueFromViewers = watchingNow*200*12*revenuePerHourPerUser#currentlywatching*hours per month*months *revPerhourPerMonth
+	estimatedRevenueFromSubscriptionsYearly = 0.007*followers*3*12
+	estimatedRevenueFromDonationsPromotionsAdvertising = estimatedRevenueFromSubscriptionsYearly
+	estimatedRevenue = estimatedRevenueFromViewers + estimatedRevenueFromSubscriptionsYearly + estimatedRevenueFromDonationsPromotionsAdvertising
+	return estimatedRevenue

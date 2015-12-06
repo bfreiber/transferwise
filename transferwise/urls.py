@@ -21,6 +21,7 @@ urlpatterns = [
 		url(r'^$', 'transferwise.views.landing', name='landing'),
 		url(r'^loginViaTwitch/$', 'transferwise.views.loginViaTwitch', name='loginViaTwitch'),
 		url(r'^twitchLoginLanding/$', 'transferwise.views.twitchLoginLanding', name='twitchLoginLanding'),
+		url(r'^dashboard/$', 'transferwise.views.dashboard', name='dashboard'),
 
     url(r'^admin/', admin.site.urls),
 ]
